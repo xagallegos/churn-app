@@ -1,5 +1,4 @@
 import streamlit as st
-from streamlit_option_menu import option_menu
 import pandas as pd
 import requests
 import json
@@ -90,3 +89,16 @@ with col5:
 
 df_input = pd.DataFrame(dict_input, index=[0])
 st.divider()
+
+cola, colb = st.columns([0.1,0.9])
+
+with cola:
+    pred = st.button('Predict')
+
+with colb:
+    if pred:
+        url = 'http://churn-api:5000/api/v1/classify?api_key=ChurnModel-2024$*'
+        payload = json.dumps(dict_input)
+        headers = {'Content-Type': 'application/json'}
+        response = requests.request("GET", url, headers=headers, data=payload)
+        st.subheader(response.json()['prediction'])

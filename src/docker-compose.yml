@@ -1,0 +1,11 @@
+version: '3.11'
+services:
+  churn-api:
+    build: ./backend/
+    ports:
+      - '5000:5000'
+
+  frontend-iris:
+    build: ./frontend/
+    ports:
+      - '8501:8501'
