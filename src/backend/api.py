@@ -69,15 +69,19 @@ def get_api_key(api_key_query: str = Security(api_key_query)):
 
 @app.on_event("startup")
 def load_model():
-    global model1
-    with open("../../model/model.pickle", "rb") as openfile:
-        model1 = pickle.load(openfile)
+    import mlflow
+    global logged_model
+
+    mlflow.set_tracking_uri('https://dagshub.com/xagallegos/churn-app.mlflow')
+    logged_model = 'runs:/c83fd81e4f8c43f18b23ddc2ed180e6a/ada_boost_classifier'
+    logged_model = mlflow.pyfunc.load_model(logged_model)
 
 @app.get("/api/v1/classify")
 def classify(features_model: FeaturesModel, api_key: str = Depends(get_api_key)):
-
+    import pandas as pd
     features = [val for val in features_model.__dict__.values()]
-    prediction = model1.predict([features])
+
+    prediction = logged_model.predict([features])
 
     label_dict = {
         0: "Not churn",
