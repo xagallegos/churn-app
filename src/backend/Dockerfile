@@ -7,7 +7,6 @@ RUN apt-get update && apt-get install -y procps && pip install -U pip && rm /etc
 COPY ./requirements.txt /requirements.txt
 RUN pip install -r ./requirements.txt
 
-COPY ./model /model
 COPY ./api.py /api.py
 
 EXPOSE 5000
